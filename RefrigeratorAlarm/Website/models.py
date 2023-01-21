@@ -1,5 +1,5 @@
 from django.db import models
-import telepot, pywhatkit
+import telepot
 
 token = "5597818811:AAFMFHNDLhFEXYeroNpoUXIGYpswjq4Dfiw";
 ## Anass
