@@ -5,30 +5,384 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js"></script>
     <title>Table de temperature</title>
-</head>
-<body class="container">
-<a class="btn btn-primary" href="/csv">Télécharger comme CSV</a>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Temperature</th>
-      <th scope="col">Date-time</th>
-    </tr>
-  </thead>
-  <tbody class="table-group-divider">
-   {% for t in tab %}
-    <tr>
-      <td>{{ t.id}}</td>
-      <td>{{ t.temp }}</td>
-      <td>{{ t.dt }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    <style>
+        html,
+        body,
+        .intro {
+            height: 100%;
+        }
 
+        table td,
+        table th {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        thead th {
+            color: #fff;
+        }
+
+        .card {
+            border-radius: .5rem;
+        }
+
+        .table-scroll {
+            border-radius: .5rem;
+        }
+
+        .table-scroll table thead th {
+            font-size: 1.25rem;
+        }
+
+        thead {
+            top: 0;
+            position: sticky;
+        }
+
+        .chart--container {
+            border: 1px solid;
+            box-shadow: 10px 5px 5px #5f5f5f;
+            min-height: 530px;
+            display: block;
+            margin: 100px;
+        }
+
+        .zc-ref {
+            display: none;
+        }
+
+        .zc-background {
+            background-color: #fff;
+        }
+
+        .m-button {
+            margin: 40px;
+            padding: 15px;
+            cursor: pointer;
+            background-color: #FF4081;
+            border: none;
+            box-shadow: 5px 5px 5px #eee;
+            color: #fff;
+            font-family: Roboto;
+            font-size: 16px;
+            transition: .1s;
+        }
+
+        .m-button:active {
+            border-width: 0 0 2px 0;
+            opacity: 0.9;
+            transform: translateY(8px);
+        }
+
+        .m-button:hover {
+            opacity: .9;
+        }
+
+        #container1 {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        #myChart2 {
+            min-height: 530px;
+            background-color: #fff;
+            height: 380px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="myChart1" class="chart--container">
+    <a class="zc-ref">Temperature</a>
+</div>
+<div id="myChart2" class="chart--container">
+    <a class="zc-ref">Temperature</a>
+</div>
+<div>
+    <section class="intro">
+        <div class="bg-image h-100">
+            <div class="mask d-flex align-items-center h-100">
+                <div class="container">
+                    <div class="row justify-content-center">
+
+                        <div class="col-12" style="padding-bottom: 20px">
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true"
+                                         style="position: relative; height: 700px">
+                                        <br>
+                                        <table class="table table-striped mb-0">
+                                            <thead style="background-color: #002d72;">
+                                            <tr>
+                                                <th scope="col" class="col-xs-1 text-center">Temperature</th>
+                                                <th scope="col" class="col-xs-1 text-center">Date-heure</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="table-group-divider">
+                                            {% for t in tab %}
+                                                <tr class="col-xs-1 text-center">
+                                                    <td>{{ t.temp }}</td>
+                                                    <td>{{ t.dt }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary" href="/csv">Télécharger comme CSV</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<br>
+<div>
+    <section>
+        <div class="bg-image h-50" style="padding:100px 20px;">
+            <div class="mask d-flex align-items-center h-50">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <canvas id="myAreaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<br>
 </body>
+<script>
+    const dates = [{% for i in tab %} '{{i.dt}}', {% endfor %}];
+    const datas = [{% for i in tab %} '{{i.temp}}', {% endfor %}];
+    var ctx = document.getElementById('myAreaChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            scaleShowLabels: false,
+            datasets: [{
+                label: 'Temperature',
+                data: datas,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: .1
+            }]
+        }
+    });
+
+    let feed = (callback) => {
+        let tick = {};
+        tick.plot0 = Math.floor(datas[datas.length - 1]);
+        callback(JSON.stringify(tick));
+    };
+
+    let chartConfig1 = {
+        type: 'gauge',
+        globals: {
+            fontSize: '25px',
+        },
+        plot: {
+            tooltip: {
+                borderRadius: '5px',
+            },
+            valueBox: {
+                text: '%v', // default
+                fontSize: '35px',
+                placement: 'center',
+                rules: [
+                    {
+                        text: '%v<br>Excellent✅',
+                        rule: '%v < 4',
+                    },
+                    {
+                        text: '%v<br>Danger modéré⚠️',
+                        rule: '%v >= 4 && %v < 6',
+                    },
+                    {
+                        text: '%v<br>Niveau critique🚨',
+                        rule: '%v >  6',
+                    },
+                ],
+            },
+            size: '100%',
+        },
+        plotarea: {
+            marginTop: '80px',
+        },
+        scaleR: {
+            aperture: 180,
+            center: {
+                visible: false,
+            },
+            item: {
+                offsetR: 0,
+                rules: [
+                    {
+                        offsetX: '15px',
+                        rule: '%i == 9',
+                    },
+                ],
+            },
+            values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            labels: ['0', '', '', '', '4', '', '6', '', '', '', '10'],
+            maxValue: 10,
+            minValue: 0,
+            ring: {
+                rules: [
+                    {
+                        backgroundColor: '#E53935',
+                        rule: '%v <= 4',
+                    },
+                    {
+                        backgroundColor: '#FFA726',
+                        rule: '%v >= 4 && %v < 6',
+                    },
+                    {
+                        backgroundColor: '#29B6F6',
+                        rule: '%v >= 6',
+                    },
+                ],
+                size: '50px',
+            },
+            step: 50,
+            tick: {
+                visible: false,
+            },
+        },
+        refresh: {
+            type: 'feed',
+            url: 'feed()',
+            interval: 1500,
+            resetTimeout: 1000,
+            transport: 'js',
+        },
+        series: [
+            {
+                values: [0], // starting value
+                animation: {
+                    effect: 'ANIMATION_EXPAND_VERTICAL',
+                    method: 'ANIMATION_BACK_EASE_OUT',
+                    sequence: 'null',
+                    speed: 900,
+                },
+                backgroundColor: 'black',
+                indicator: [10, 10, 10, 10, 0.75],
+            },
+        ],
+    };
+
+    zingchart.render({
+        id: 'myChart1',
+        data: chartConfig1,
+        height: '100%',
+        width: '100%',
+    });
+
+
+    let chartConfig2 = {
+        type: 'line',
+        globals: {
+            fontFamily: 'Roboto'
+        },
+        backgroundColor: '#fff',
+        title: {
+            text: 'Temperature',
+            backgroundColor: '#1565C0',
+            color: '#fff',
+            height: '30x'
+        },
+        plot: {
+            aspect: 'spline',
+            hoverState: {
+                visible: false
+            },
+            lineWidth: '5px',
+            marker: {
+                visible: false
+            },
+            shadow: true,
+            shadowColor: '#eee',
+            shadowDistance: '10px'
+        },
+        plotarea: {
+            marginTop: '80px'
+        },
+        scaleY: {
+            values: '0:30:2',
+            guide: {
+                visible: false
+            }
+        },
+        crosshairX: {
+            lineColor: '#424242',
+            lineStyle: 'dashed',
+            lineWidth: '4px',
+            marker: {
+                size: '9px',
+                visible: true
+            },
+            plotLabel: {
+                padding: '15px',
+                backgroundColor: '#fff',
+                borderColor: '#e3e3e3',
+                borderRadius: '5px',
+                fontSize: '15px',
+                shadow: true,
+                shadowAlpha: 0.2,
+                shadowBlur: 5,
+                shadowDistance: 4
+            },
+            scaleLabel: {
+                padding: '5px',
+                backgroundColor: '#424242'
+            }
+        },
+        tooltip: {
+            visible: false
+        },
+        refresh: {
+            type: 'feed',
+            url: 'feed2()',
+            interval: 500,
+            transport: 'js'
+        },
+        series: [
+            {
+                text: 'Temperature',
+                values: [],
+                lineColor: '#2196F3'
+            },
+        ]
+    };
+
+    zingchart.render({
+        id: 'myChart2',
+        data: chartConfig2,
+        height: '100%',
+        width: '100%',
+    });
+
+    // real-time feed random math function
+    window.feed2 = (callback) => {
+        let tick2 = {};
+        tick2.plot0 = Math.floor(datas[datas.length - 1]);
+        callback(JSON.stringify(tick2));
+    };
+
+</script>
 </html>

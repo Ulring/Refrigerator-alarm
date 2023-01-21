@@ -17,19 +17,19 @@ class Temperature (models.Model):
         return str(self.temp)
 
     def save(self , *args , **kwargs) :
-        if self.temp < 5:
+        if self.temp < 4:
             Temperature.counter = 0
             #bot.sendMessage(rece_id, str(self.temp) + "(Excellent✅)")
-        if self.temp >= 5 and self.temp < 8:
+        if self.temp >= 4 and self.temp < 6:
             bot.sendMessage(rece_id1, str(self.temp) + "(Danger modéré⚠️)")
             Temperature.counter += 1
-        elif self.temp >= 8:
+        elif self.temp >= 6:
             bot.sendMessage(rece_id1, str(self.temp) + "(Niveau critique🚨)")
             Temperature.counter += 1
-        if self.temp >= 5 and self.temp < 8 and Temperature.counter > 10:
+        if self.temp >= 4 and self.temp < 6 and Temperature.counter > 10:
             bot.sendMessage(rece_id1, str(self.temp) + "(Danger modéré⚠️)")
             bot.sendMessage(rece_id2, str(self.temp) + "(Danger modéré⚠️)")
-        elif self.temp >= 8 and Temperature.counter > 10:
+        elif self.temp >= 6 and Temperature.counter > 10:
             bot.sendMessage(rece_id1, str(self.temp) + "(Niveau critique🚨)")
             bot.sendMessage(rece_id2, str(self.temp) + "(Niveau critique🚨)")
         return super().save(*args, **kwargs)

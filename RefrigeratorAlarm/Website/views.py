@@ -8,7 +8,9 @@ from .models import Temperature
 
 # Create your views here.
 def home(request) :
-    return HttpResponse('Hello World!:)')
+    tab = Temperature.objects.all()
+    s = {'tab': tab}
+    return render(request, 'tables.html', s)
 
 def temperature(request):
     tab = Temperature.objects.all()
