@@ -9,4 +9,5 @@ urlpatterns = [
     path('csv/', views.exp_csv, name='exp-csv'),
     path('api/list', api.Dlist, name='TEMPERATUREList'),
     path('api/post', api.Temperatureviews.as_view(), name='TEMPERATURE_post'),
+
 ]
